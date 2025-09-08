@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 const Message = require("../models/Message");
 const Chat = require("../models/Chat");
+const { markAsRead } = require("../controllers/messageController");
 
 // Get messages of a chat
 router.get("/:chatId", auth, async (req, res) => {
@@ -30,5 +31,8 @@ router.post("/:chatId", auth, async (req, res) => {
 
   res.json(message);
 });
+
+// Add to message routes (backend/routes/message.js)
+router.post("/:messageId/read", auth, markAsRead);
 
 module.exports = router;

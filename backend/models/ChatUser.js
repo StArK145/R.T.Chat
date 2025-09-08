@@ -8,8 +8,10 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatUser" }],
-    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatUser" }], // incoming
-    sentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatUser" }], // outgoing
+    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatUser" }],
+    sentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: "ChatUser" }],
+    isOnline: { type: Boolean, default: false }, // Add online status
+    lastSeen: { type: Date, default: Date.now }, // Add last seen timestamp
   },
   { timestamps: true }
 );

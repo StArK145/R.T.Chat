@@ -1,9 +1,10 @@
 const ChatUser = require("../models/ChatUser");
+const Chat = require("../models/Chat");
 
 // Send friend request
 exports.sendRequest = async (req, res) => {
   try {
-    const { userId } = req.body; // target user
+    const { userId } = req.body;
     const sender = await ChatUser.findById(req.user.id);
     const receiver = await ChatUser.findById(userId);
 
@@ -25,10 +26,10 @@ exports.sendRequest = async (req, res) => {
   }
 };
 
-// Accept request
+// Accept request AND create chat automatically
 exports.acceptRequest = async (req, res) => {
   try {
-    const { userId } = req.body; // sender of request
+    const { userId } = req.body;
     const receiver = await ChatUser.findById(req.user.id);
     const sender = await ChatUser.findById(userId);
 
@@ -50,6 +51,29 @@ exports.acceptRequest = async (req, res) => {
 
     await receiver.save();
     await sender.save();
+
+    // ✅ Create a private chat automatically when accepting friend request
+    const existingChat = await Chat.findOne({
+      isGroup: false,
+      participants: { $all: [req.user.id, userId], $size: 2 }
+    });
+
+    if (!existingChat) {
+      // Create new private chat
+      const newChat = await Chat.create({
+        isGroup: false,
+        participants: [req.user.id, userId]
+      });
+      
+      // Populate the chat for socket emission
+      const populatedChat = await Chat.findById(newChat._id)
+        .populate("participants", "username email");
+      
+      // Notify both users about the new chat
+      const io = req.app.get("io");
+      io.to(req.user.id).emit("newChat", populatedChat);
+      io.to(userId).emit("newChat", populatedChat);
+    }
 
     res.json({ message: "Friend request accepted" });
   } catch (err) {

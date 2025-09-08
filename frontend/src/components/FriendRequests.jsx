@@ -5,7 +5,7 @@ import {
   rejectFriendRequest,
 } from "../services/FriendService";
 
-function FriendRequests() {
+function FriendRequests({ onFriendAccepted })  {
   const [requests, setRequests] = useState([]);
   const [friends, setFriends] = useState([]);
 
@@ -22,6 +22,12 @@ function FriendRequests() {
   const handleAccept = async (id) => {
     await acceptFriendRequest(id);
     fetchRequests();
+    
+    // Notify parent component that a friend was accepted
+    // This will trigger a refresh of the chat list
+    if (onFriendAccepted) {
+      onFriendAccepted();
+    }
   };
 
   const handleReject = async (id) => {
