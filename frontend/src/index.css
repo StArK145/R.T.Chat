@@ -1,1 +1,289 @@
+/* frontend/src/index.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* prevent double scrollbars */
+}
+
+
 @import "tailwindcss";
+
+:root {
+  --primary-color: #3b82f6;
+  --primary-hover: #2563eb;
+  --secondary-color: #64748b;
+  --background-light: #f9fafb;
+  --background-dark: #111827;
+  --text-light: #1f2937;
+  --text-dark: #f3f4f6;
+  --card-light: #ffffff;
+  --card-dark: #1f2937;
+  --border-light: #e5e7eb;
+  --border-dark: #374151;
+}
+
+/* Custom styles for dark mode */
+.dark {
+  color-scheme: dark;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Custom scrollbar for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+
+/* Add to frontend/src/index.css */
+.sidebar-transition {
+  transition: width 0.3s ease-in-out;
+}
+
+.collapsed-sidebar {
+  width: 4rem; /* 64px */
+}
+
+.expanded-sidebar {
+  width: 16rem; /* 256px */
+}
+
+.toggle-button {
+  transition: transform 0.3s ease-in-out;
+}
+
+.toggle-button:hover {
+  transform: scale(1.1);
+}
+
+
+/* Add to frontend/src/index.css */
+/* Mobile responsive styles */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar-mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 75%;
+  max-width: 300px;
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-mobile.open {
+  transform: translateX(0);
+}
+
+.chatlist-mobile {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  transform: translateX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+.chatlist-mobile.hidden {
+  transform: translateX(100%);
+}
+
+.chat-mobile {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.chat-mobile.open {
+  transform: translateX(0);
+}
+
+/* Improve touch targets for mobile */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Smooth transitions */
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Custom scrollbar for mobile */
+.mobile-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.mobile-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobile-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 2px;
+}
+
+.mobile-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.7);
+}
+
+/* Add to frontend/src/index.css */
+/* Back button styles */
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: rgba(229, 231, 235, 0.8);
+  border: 1px solid rgba(209, 213, 219, 0.5);
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: rgba(229, 231, 235, 1);
+  transform: scale(1.05);
+}
+
+.dark .back-button {
+  background-color: rgba(55, 65, 81, 0.8);
+  border-color: rgba(75, 85, 99, 0.5);
+}
+
+.dark .back-button:hover {
+  background-color: rgba(55, 65, 81, 1);
+}
+
+/* Mobile-specific back button */
+.mobile-back-button {
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Chat header layout */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: white;
+}
+
+.dark .chat-header {
+  border-bottom-color: #374151;
+  background-color: #1f2937;
+}
+
+.chat-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .chat-title {
+  color: #f9fafb;
+}
+
+.chat-status {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.dark .chat-status {
+  color: #9ca3af;
+}
+
+/* Add to frontend/src/index.css */
+/* Layout transitions */
+.layout-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Ensure proper flex behavior */
+.flex-container {
+  display: flex;
+  min-width: 0; /* Important for flex items to shrink properly */
+}
+
+.flex-item {
+  flex-shrink: 0; /* Prevent shrinking by default */
+}
+
+.flex-expand {
+  flex: 1;
+  min-width: 0; /* Allow content to shrink */
+}
+
+/* Sidebar width transitions */
+.sidebar-desktop {
+  width: 16rem; /* 256px */
+  transition: width 0.3s ease-in-out;
+}
+
+.sidebar-desktop.collapsed {
+  width: 4rem; /* 64px */
+}
+
+/* Chat list width adjustments */
+.chat-list-desktop {
+  width: 33.333%; /* 1/3 width when sidebar expanded */
+  transition: width 0.3s ease-in-out;
+}
+
+.chat-list-desktop.sidebar-collapsed {
+  width: 25%; /* 1/4 width when sidebar collapsed */
+}
+
+/* Chat area should fill remaining space */
+.chat-area {
+  flex: 1;
+  min-width: 0;
+} 

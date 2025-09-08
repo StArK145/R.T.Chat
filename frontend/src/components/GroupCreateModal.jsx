@@ -1,6 +1,8 @@
+// frontend/src/components/GroupCreateModal.jsx - Fixed version
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getFriendRequests } from "../services/FriendService";
+import { useTheme } from "../contexts/ThemeContext";
 
 function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
   const [groupName, setGroupName] = useState("");
@@ -8,6 +10,7 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -19,10 +22,8 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
   }, [isOpen]);
 
   const fetchSuggestions = async () => {
-    
-       const res = await getFriendRequests();
-       setSuggestions (res.data.friends);
-     
+    const res = await getFriendRequests();
+    setSuggestions(res.data.friends);
   };
 
   const toggleUserSelection = (user) => {
@@ -72,8 +73,8 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96 max-h-96 overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className={`rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col ${isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`}>
         <h2 className="text-xl font-semibold mb-4">Create Group Chat</h2>
         
         {error && (
@@ -87,7 +88,7 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
           placeholder="Group Name"
           value={groupName}
           onChange={(e) => setGroupName(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className={`w-full p-2 border rounded mb-4 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-gray-100' : 'bg-white border-gray-300 text-gray-900'}`}
           disabled={loading}
         />
         
@@ -117,8 +118,8 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
           </div>
         )}
         
-        {/* Suggestions list */}
-        <div className="flex-1 overflow-y-auto mb-4 border rounded">
+        {/* Suggestions list with proper scrolling */}
+        <div className={`flex-1 overflow-y-auto mb-4 border rounded ${isDarkMode ? 'border-gray-600' : 'border-gray-300'}`} style={{ minHeight: '200px', maxHeight: '300px' }}>
           {suggestions.length === 0 ? (
             <div className="p-4 text-center text-gray-500">
               No suggestions available. Add some friends first!
@@ -127,8 +128,10 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
             suggestions.map(user => (
               <div
                 key={user._id}
-                className={`flex items-center p-3 hover:bg-gray-50 cursor-pointer ${
-                  selectedUsers.some(u => u._id === user._id) ? 'bg-blue-50' : ''
+                className={`flex items-center p-3 cursor-pointer ${
+                  selectedUsers.some(u => u._id === user._id) 
+                    ? 'bg-blue-50 dark:bg-blue-900' 
+                    : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => toggleUserSelection(user)}
               >
@@ -139,19 +142,21 @@ function GroupCreateModal({ isOpen, onClose, onGroupCreated }) {
                   className="mr-3"
                   disabled={loading}
                 />
-                <div className="flex-1">
-                  <div className="font-medium">{user.username}</div>
-                  <div className="text-sm text-gray-500">{user.email}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium truncate">{user.username}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 truncate">{user.email}</div>
                 </div>
               </div>
             ))
           )}
         </div>
         
-        <div className="flex justify-end space-x-2 pt-4 border-t">
+        <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+            className={`px-4 py-2 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 ${
+              isDarkMode ? 'border-gray-600 text-gray-100' : 'border-gray-300 text-gray-900'
+            }`}
             disabled={loading}
           >
             Cancel
